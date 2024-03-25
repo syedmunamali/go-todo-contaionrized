@@ -1,30 +1,20 @@
-# Use the official Golang image to create a build
-FROM golang:latest AS builder
+# Base image with Go environment
+FROM golang
 
-# Set the Current Working Directory inside the container
-WORKDIR /app
+# Set working directory
+WORKDIR /home/app
 
-# Copy go mod and sum files
-COPY go.mod go.sum ./
-
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
-RUN go mod download
-
-# Copy the source code from the current directory to the Working Directory inside the container
+# Copying Go source code
 COPY . .
 
-# Build the Go app
+# Installing dependencies using go mod
+RUN go mod download
+
+# Building the Go application
 RUN go build -o main .
 
-# Start a new stage from scratch
-FROM alpine:latest  
+# Exposing the port my Go app listens to
+EXPOSE 4040
 
-RUN apk --no-cache add ca-certificates
-
-WORKDIR /root/
-
-# Copy the Pre-built binary file from the previous stage
-COPY --from=builder /app/main .
-
-# Command to run the executable
+# Command to run the application
 CMD ["./main"]

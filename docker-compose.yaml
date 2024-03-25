@@ -1,19 +1,28 @@
-version: '3'
+version: '3.8'
 
 services:
-  app:
-    build: .
+  # Go App Container
+  go-app:
+    build:
+      context: .
     ports:
       - "4040:4040"
+    environment:
+      - PORT=4040
+      - DB_HOST=mysql_container2
+      - DB_USER=root
+      - DB_PASS=danyal123
+      - DB_PORT=3306
+      - DB_DATABASE=gotodo
     depends_on:
-      - db
+      - mysql_container2
 
-  db:
+  # MySQL Container
+  mysql_container2:
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: ""
-      MYSQL_DATABASE: gotodo
-      MYSQL_USER: root
-      MYSQL_PASSWORD: ""
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+      - MYSQL_DATABASE=gotodo
+      - MYSQL_ROOT_USER=root
     ports:
       - "3306:3306"
