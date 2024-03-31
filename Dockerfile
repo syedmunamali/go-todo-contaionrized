@@ -8,13 +8,13 @@ WORKDIR /home/app
 COPY . .
 
 # Installing dependencies using go mod
-RUN go mod download
+#RUN go mod download
 
 # Building the Go application
-RUN go build -o main .
+#RUN go build -o main .
 
 # Exposing the port my Go app listens to
 EXPOSE 4040
 
 # Command to run the application
-CMD ["./main"]
+CMD ["go", "run", "main.go"]
